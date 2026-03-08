@@ -1,29 +1,4 @@
-// ================================================================
-//  ParkingPortal.java  –  Urban Parking Portal  (Java DSA Backend)
-//
-//  DSA SYLLABUS COVERAGE
-//  ─────────────────────────────────────────────────────────────
-//  CO1 : Big-O/Ω/Θ analysis on every method, Binary Search for
-//        slot lookup, Merge Sort & Quick Sort for slot reports,
-//        Bubble Sort for small lists, empirical timing
-//
-//  CO2 : Singly Linked List  → Notification log
-//        Doubly Linked List  → Booking history (fwd + bwd)
-//        Circular Linked List→ Basement round-robin navigator
-//        Operations : insert, delete, search, traverse,
-//                     reverse, detect cycle
-//
-//  CO3 : Stack (array-based)  → Screen / navigation history
-//        Queue (linked)       → Service-request queue (FIFO)
-//        Circular Queue       → Slot event ring buffer
-//        Deque                → Recent-search history
-//        Min-Heap             → Priority slot assignment
-//        Priority Queue       → VIP / timed service requests
-//
-//  CO4 : Hash Table – Chaining       → User store (admin + customer)
-//        Hash Table – Open Addressing → Parking slot store
-//        Java Collections (List, Queue, Deque, Map) for reports
-// ================================================================
+
 
 import java.util.*;
 
