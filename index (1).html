@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- CO5: SEO meta tags -->
+  <meta name="description" content="Urban Parking Portal – Smart Multi-Level Parking Management" />
+  <meta name="keywords" content="parking, urban, smart parking, slot booking" />
+  <meta name="author" content="Urban Parking Portal" />
+  <!-- CO5: Relaxed CSP for offline use -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src * 'unsafe-inline' data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline';" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Urban Parking Portal</title>
+  <!-- CO1: External CDN font (web-hosting / HTTP concept) -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- CO2: Semantic <header> -->
+  <header class="site-header" aria-label="Site Header">
+    <!-- CO1: h1 -->
+    <h1>🚗 Urban Parking Portal</h1>
+    <!-- CO1: paragraph -->
+    <p>Smart Multi-Level Parking Management System</p>
+  </header>
+
+  <!-- CO2: Semantic <main> -->
+  <main class="container" role="main">
+
+    <!-- ══════════════ WELCOME ══════════════ -->
+    <section id="welcomeScreen" class="card" aria-labelledby="welcomeTitle">
+      <h2 id="welcomeTitle">Welcome! Who are you?</h2>
+      <!-- CO1: <ul> unordered list -->
+      <ul class="user-type-selector" role="list">
+        <li class="user-type-card admin"
+            onclick="selectUserType('admin')" tabindex="0" role="button"
+            aria-label="Login as Admin"
+            onkeydown="if(event.key==='Enter')selectUserType('admin')">
+          <!-- CO1: <img> with alt (CO2: accessibility alt attribute) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+  <circle cx="30" cy="30" r="30" fill="#FFB5E8"/>
+  <circle cx="30" cy="22" r="10" fill="#fff"/>
+  <ellipse cx="30" cy="50" rx="16" ry="10" fill="#fff"/>
+  <rect x="22" y="12" width="16" height="6" rx="3" fill="#E5D4FF"/>
+</svg>
+          <h3>Admin</h3>
+          <p>Manage parking spaces</p>
+        </li>
+        <li class="user-type-card customer"
+            onclick="selectUserType('customer')" tabindex="0" role="button"
+            aria-label="Login as Customer"
+            onkeydown="if(event.key==='Enter')selectUserType('customer')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+  <circle cx="30" cy="30" r="30" fill="#B4E4FF"/>
+  <circle cx="30" cy="22" r="10" fill="#fff"/>
+  <ellipse cx="30" cy="50" rx="16" ry="10" fill="#fff"/>
+</svg>
+          <h3>Customer</h3>
+          <p>Find &amp; book parking</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ══════════════ ADMIN AUTH ══════════════ -->
+    <section id="adminAuth" class="card hidden" aria-label="Admin Authentication">
+      <button class="btn btn-outline back-btn" onclick="goBack()" aria-label="Go back">← Back</button>
+      <h2>Admin Access</h2>
+
+      <!-- CO2: <form> with HTML5 built-in validation -->
+      <form id="adminLoginForm" onsubmit="adminLogin(event)" novalidate aria-label="Admin Login">
+        <h3>Login</h3>
+        <div class="form-group">
+          <label for="adminLoginEmail">Email</label>
+          <!-- CO2: type=email, placeholder, required, aria-required -->
+          <input type="email" id="adminLoginEmail" placeholder="admin@parking.com"
+                 required aria-required="true" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="adminLoginId">Admin ID</label>
+          <!-- CO2: pattern attribute for validation -->
+          <input type="text" id="adminLoginId" placeholder="ADM12345"
+                 required aria-required="true"
+                 pattern="[A-Za-z]{3}[0-9]{5}" title="Format: ADM12345" />
+        </div>
+        <!-- CO2: <button> -->
+        <button type="submit" class="btn btn-primary full-width">Login</button>
+        <p class="form-switch">No account? <a href="#" onclick="showAdminSignup();return false;">Sign Up</a></p>
+      </form>
+
+      <form id="adminSignupForm" class="hidden" onsubmit="adminSignup(event)" novalidate aria-label="Admin Signup">
+        <h3>Create Admin Account</h3>
+        <div class="form-group">
+          <label for="adminSignupName">Full Name</label>
+          <input type="text" id="adminSignupName" placeholder="John Doe" required aria-required="true" />
+        </div>
+        <div class="form-group">
+          <label for="adminSignupEmail">Email</label>
+          <input type="email" id="adminSignupEmail" placeholder="admin@parking.com" required aria-required="true" />
+        </div>
+        <div class="form-group">
+          <label for="adminSignupPhone">Phone</label>
+          <!-- CO2: type=tel -->
+          <input type="tel" id="adminSignupPhone" placeholder="+1 234 567 8900" required aria-required="true" />
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Create Account</button>
+        <p class="form-switch">Have an account? <a href="#" onclick="showAdminLogin();return false;">Login</a></p>
+      </form>
+    </section>
+
+    <!-- ══════════════ CUSTOMER AUTH ══════════════ -->
+    <section id="customerAuth" class="card hidden" aria-label="Customer Authentication">
+      <button class="btn btn-outline back-btn" onclick="goBack()">← Back</button>
+      <h2>Customer Access</h2>
+
+      <form id="customerLoginForm" onsubmit="customerLogin(event)" novalidate aria-label="Customer Login">
+        <h3>Login</h3>
+        <div class="form-group">
+          <label for="customerLoginEmail">Email</label>
+          <input type="email" id="customerLoginEmail" placeholder="customer@email.com"
+                 required aria-required="true" autocomplete="email" />
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Login</button>
+        <p class="form-switch">No account? <a href="#" onclick="showCustomerSignup();return false;">Sign Up</a></p>
+      </form>
+
+      <form id="customerSignupForm" class="hidden" onsubmit="customerSignup(event)" novalidate aria-label="Customer Signup">
+        <h3>Create Customer Account</h3>
+        <div class="form-group">
+          <label for="customerSignupName">Full Name</label>
+          <input type="text" id="customerSignupName" placeholder="Jane Smith" required aria-required="true" />
+        </div>
+        <div class="form-group">
+          <label for="customerMallSelect">Select Mall / Showroom</label>
+          <!-- CO2: <select> and <option> -->
+          <select id="customerMallSelect" required aria-required="true">
+            <option value="">Choose a location...</option>
+            <option value="City Center Mall">City Center Mall</option>
+            <option value="Metro Plaza">Metro Plaza</option>
+            <option value="Sunshine Showroom">Sunshine Showroom</option>
+            <option value="Grand Mall">Grand Mall</option>
+            <option value="Elite Motors Showroom">Elite Motors Showroom</option>
+            <option value="Downtown Shopping Complex">Downtown Shopping Complex</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="customerSignupEmail">Email</label>
+          <input type="email" id="customerSignupEmail" placeholder="customer@email.com" required aria-required="true" />
+        </div>
+        <div class="form-group">
+          <label for="customerSignupPhone">Phone</label>
+          <input type="tel" id="customerSignupPhone" placeholder="+1 234 567 8900" required aria-required="true" />
+        </div>
+        <div class="form-group">
+          <label for="vehicleNumber">Vehicle Number</label>
+          <!-- CO2: type=text, pattern, placeholder -->
+          <input type="text" id="vehicleNumber" placeholder="e.g. MH12AB3456"
+                 pattern="[A-Z0-9]{4,12}" title="Alphanumeric vehicle number" required aria-required="true" />
+        </div>
+        <!-- CO2: <textarea> -->
+        <div class="form-group">
+          <label for="customerNote">Additional Notes (optional)</label>
+          <textarea id="customerNote" placeholder="Any special requirements..." rows="3" aria-label="Additional notes"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Create Account</button>
+        <p class="form-switch">Have an account? <a href="#" onclick="showCustomerLogin();return false;">Login</a></p>
+      </form>
+    </section>
+
+    <!-- ══════════════ ADMIN DASHBOARD ══════════════ -->
+    <section id="adminDashboard" class="hidden" aria-label="Admin Dashboard">
+
+      <div class="user-info" role="status" aria-live="polite">
+        <div>
+          <h3>👨‍💼 Admin Dashboard</h3>
+          <p id="adminNameDisplay"></p>
+        </div>
+        <button class="btn btn-outline" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- CO2: <article> -->
+      <article class="card" aria-label="Notifications">
+        <h3>📬 Recent Notifications</h3>
+        <div id="adminNotifications" class="admin-notifications" role="log" aria-live="polite">
+          <p style="text-align:center;color:var(--text-secondary)">No new notifications</p>
+        </div>
+      </article>
+
+      <!-- CO2: <nav> -->
+      <nav class="basement-selector" aria-label="Basement Navigation">
+        <button class="basement-btn active" onclick="switchBasement(1,'admin')" aria-pressed="true">
+          🅱️ Basement 1<span class="basement-info" id="adminB1Info">Loading...</span>
+        </button>
+        <button class="basement-btn" onclick="switchBasement(2,'admin')" aria-pressed="false">
+          🅱️ Basement 2<span class="basement-info" id="adminB2Info">Loading...</span>
+        </button>
+        <button class="basement-btn" onclick="switchBasement(3,'admin')" aria-pressed="false">
+          🅱️ Basement 3<span class="basement-info" id="adminB3Info">Loading...</span>
+        </button>
+      </nav>
+
+      <div class="card">
+        <div class="parking-header">
+          <h2 id="adminBasementTitle">Basement 1 – Parking Management</h2>
+          <div class="parking-stats">
+            <div class="stat-badge free">🟢 Free: <span id="adminFreeCount">0</span></div>
+            <div class="stat-badge occupied">🔴 Occupied: <span id="adminOccupiedCount">0</span></div>
+            <div class="stat-badge leaving">🟡 Leaving: <span id="adminLeavingCount">0</span></div>
+          </div>
+        </div>
+        <!-- CO2: <table> <thead> <tbody> <tr> <td> <th> -->
+        <table class="stats-table" aria-label="Slot legend">
+          <thead>
+            <tr><th>Status</th><th>Color</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Free</td>
+              <td><span class="legend-color" style="background:var(--free-slot)"></span></td>
+              <td>Available to book</td>
+            </tr>
+            <tr>
+              <td>Occupied</td>
+              <td><span class="legend-color" style="background:var(--occupied-slot)"></span></td>
+              <td>Currently in use</td>
+            </tr>
+            <tr>
+              <td>Leaving Soon</td>
+              <td><span class="legend-color" style="background:var(--leaving-soon)"></span></td>
+              <td>Click to mark free</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="adminParkingGrid" class="parking-grid" role="grid" aria-label="Parking slots"></div>
+      </div>
+
+      <!-- Admin: Customer Records -->
+      <div class="card">
+        <h3>👥 Registered Customers</h3>
+        <div style="overflow-x:auto">
+          <table class="stats-table" aria-label="Customer records">
+            <thead>
+              <tr><th>Name</th><th>Email</th><th>Mall</th><th>Vehicle</th><th>Slot</th><th>Status</th></tr>
+            </thead>
+            <tbody id="customerRecordsBody">
+              <tr><td colspan="6" style="text-align:center;color:var(--text-secondary)">No customers yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Admin: Service Requests -->
+      <div class="card">
+        <h3>🎫 Customer Service Requests</h3>
+        <div id="adminServiceRequests">
+          <p style="text-align:center;color:var(--text-secondary)">No service requests yet</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══════════════ CUSTOMER DASHBOARD ══════════════ -->
+    <section id="customerDashboard" class="hidden" aria-label="Customer Dashboard">
+
+      <div class="user-info" role="status" aria-live="polite">
+        <div>
+          <h3>👤 Welcome Back!</h3>
+          <p id="customerNameDisplay"></p>
+          <p id="customerMallDisplay"></p>
+        </div>
+        <button class="btn btn-outline" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- Live Booking Status Card -->
+      <div id="myBookingCard" class="card booking-card hidden" aria-live="polite" aria-label="My current booking">
+        <h3>🚗 My Current Booking</h3>
+        <div id="bookingStatusContent"></div>
+      </div>
+
+      <!-- CO2: <nav> -->
+      <nav class="basement-selector" aria-label="Basement Navigation">
+        <button class="basement-btn active" onclick="switchBasement(1,'customer')" aria-pressed="true">
+          🅱️ Basement 1<span class="basement-info" id="customerB1Info">Loading...</span>
+        </button>
+        <button class="basement-btn" onclick="switchBasement(2,'customer')" aria-pressed="false">
+          🅱️ Basement 2<span class="basement-info" id="customerB2Info">Loading...</span>
+        </button>
+        <button class="basement-btn" onclick="switchBasement(3,'customer')" aria-pressed="false">
+          🅱️ Basement 3<span class="basement-info" id="customerB3Info">Loading...</span>
+        </button>
+      </nav>
+
+      <div class="card">
+        <div class="parking-header">
+          <h2 id="customerBasementTitle">Basement 1 – Available Parking</h2>
+          <div class="parking-stats">
+            <div class="stat-badge free">🟢 Available: <span id="customerFreeCount">0</span></div>
+            <div class="stat-badge occupied">🔴 Occupied: <span id="customerOccupiedCount">0</span></div>
+            <div class="stat-badge leaving">🟡 Leaving Soon: <span id="customerLeavingCount">0</span></div>
+          </div>
+        </div>
+        <table class="stats-table" aria-label="Slot legend">
+          <thead><tr><th>Color</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="legend-color" style="background:var(--free-slot)"></span></td>
+              <td>Click to Book</td>
+            </tr>
+            <tr>
+              <td><span class="legend-color" style="background:var(--occupied-slot)"></span></td>
+              <td>Not Available</td>
+            </tr>
+            <tr>
+              <td><span class="legend-color" style="background:var(--leaving-soon)"></span></td>
+              <td>Your Slot – Manage</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="customerParkingGrid" class="parking-grid" role="grid" aria-label="Parking slots"></div>
+      </div>
+
+      <!-- ── Customer Service Section ── -->
+      <div class="card" aria-label="Customer Service">
+        <h3>📞 Customer Service</h3>
+        <p style="color:var(--text-secondary);margin-bottom:20px">Need help? Submit a request below.</p>
+
+        <form id="serviceRequestForm" onsubmit="submitServiceRequest(event)" novalidate aria-label="Service Request">
+          <div class="form-group">
+            <label for="serviceType">Request Type</label>
+            <!-- CO2: <select> <option> -->
+            <select id="serviceType" required aria-required="true">
+              <option value="">Select type...</option>
+              <option value="Slot Issue">Slot Issue</option>
+              <option value="Payment Help">Payment Help</option>
+              <option value="Complaint">Complaint</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="serviceMessage">Message</label>
+            <!-- CO2: <textarea> -->
+            <textarea id="serviceMessage" placeholder="Describe your issue or feedback..." rows="4" required aria-required="true"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="serviceRating">Rate your experience (1–5)</label>
+            <!-- CO2: type=number with min/max -->
+            <input type="number" id="serviceRating" min="1" max="5" placeholder="1 to 5" />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Request</button>
+        </form>
+
+        <!-- Live list of submitted requests -->
+        <div id="myServiceRequests" style="margin-top:25px"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ══════════════ SLOT MODAL ══════════════ -->
+  <div id="slotModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Parking Slot</h2>
+        <div id="modalSlotNumber" class="modal-slot-display" aria-live="polite"></div>
+        <p id="modalMessage"></p>
+      </div>
+      <div class="modal-actions">
+        <button id="modalOccupyBtn"      class="btn btn-success hidden"  onclick="confirmOccupy()">✅ Book Slot</button>
+        <button id="modalLeavingSoonBtn" class="btn btn-secondary hidden" onclick="confirmLeavingSoon()">⏰ Leaving Soon</button>
+        <button id="modalLeaveBtn"       class="btn btn-danger hidden"   onclick="confirmLeave()">🚗 Leave Now</button>
+        <button class="btn btn-outline"  onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CO2: Semantic <footer> -->
+  <footer class="site-footer" aria-label="Site Footer">
+    <p>© 2024 Urban Parking Portal &mdash; Built with HTML, CSS &amp; JavaScript</p>
+    <!-- CO1: <ol> ordered list -->
+    <ol class="footer-features" aria-label="Key features">
+      <li>Multi-Level Basement Management</li>
+      <li>Real-Time Slot Availability</li>
+      <li>Admin &amp; Customer Portals</li>
+    </ol>
+    <!-- CO2: <audio> with <source> -->
+    <audio id="notifSound" aria-label="Notification chime" preload="none">
+      <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=" type="audio/wav" />
+    </audio>
+    <!-- CO2: <picture> + <source> (hidden, demonstrates tag) -->
+    <picture style="display:none" aria-hidden="true">
+      <source media="(max-width:600px)" srcset="logo-sm.png" />
+      <img src="logo.png" alt="Urban Parking Logo" />
+    </picture>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
